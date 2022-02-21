@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "admin-lte": "3.2",
+    "easyqrcodejs": "^4.4.10"
+  }
+}
