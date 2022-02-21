@@ -5,7 +5,7 @@ class Document_model extends CI_Model
 {
 
     var $table = 'documents';
-    var $view = 'documents';
+    var $view = 'v_documents';
     var $column_order = array('id', 'id_user', 'original_file_name', 'original_file_ext', 'upload_time', 'signed_file_name', 'signed_file_ext', 'signed_at', 'is_del');
     var $column_search = array('id', 'id_user', 'original_file_name', 'original_file_ext', 'upload_time', 'signed_file_name', 'signed_file_ext', 'signed_at', 'is_del');
     var $order = array('upload_time', 'desc');
@@ -116,6 +116,17 @@ class Document_model extends CI_Model
         $this->db->delete($this->table);
         return $this->db->affected_rows();
     }
+
+    public function get_qry($parameter)
+    {
+        // $where = array('is_del' => 0);
+        // $this->db->where($where);
+        // $this->db->where($parameter);
+        return $this->db->query('select dc.*, u.name from documents dc join users u on dc.id_user = u.id 
+        where dc.is_del = 0 and dc.id = '.$parameter);
+        return $this->db->get($this->view);
+    }
+
 
     public function get_by($parameter)
     {

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="<?= base_url('assets/template/') ?>plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="<?= base_url('assets/template/') ?>plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="<?= base_url('assets/template/') ?>plugins/sweetalert2/sweetalert2.css">
 
   
 <link rel="stylesheet" href="<?= base_url('assets/template/') ?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -236,6 +237,8 @@
   <script src="<?= base_url('assets/template/') ?>plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
   <!-- AdminLTE App -->
   <script src="<?= base_url('assets/template/') ?>dist/js/adminlte.js"></script>
+
+  <script src="<?= base_url('assets/template/') ?>plugins/sweetalert2/sweetalert2.min.js"></script>
 
   <script src="<?= base_url('assets/template/') ?>plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="<?= base_url('assets/template/') ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

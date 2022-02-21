@@ -8,7 +8,7 @@ class Document extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('form_validation'));
-		$this->load->helper(array('url', 'language', 'app_helper', 'string'));
+		$this->load->helper(array('url', 'language', 'app_helper', 'string', 'file'));
 
 		$this->load->model(array('Document_model'));
 		if ($this->session->userdata('status') !== 'loggedin') {
@@ -29,6 +29,11 @@ class Document extends CI_Controller
 		force_download('assets/upload/' . $filename, null);
 	}
 
+	public function test()
+	{
+		// echo uniqid();
+	}
+
 	public function ajax_list()
 	{
 		$list = $this->Document_model->get_datatables();
@@ -42,6 +47,8 @@ class Document extends CI_Controller
 			$row[] = formatTglIndo_datetime($r->upload_time);
 			$row[] = ($r->signed_file_name !== null) ? '<a role="button" class="btn btn-primary btn-xs" href="' . base_url('document/download/' . $r->id) . '">Download</a> ' . $r->signed_file_name : '<a type="button" class="btn btn-warning btn-xs" href="' . base_url('document/prepareSign/' . $r->id) . '">Sign Now</a> ';
 			$row[] = ($r->signed_file_name !== null) ? formatTglIndo_datetime($r->signed_at) : "";
+			$row[] = $r->name;
+			$row[] = '<button onclick="hapus_doc(' . $r->id . ')" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-alt" aria-hidden="true"></i></button>';
 			$data[] = $row;
 		}
 
@@ -60,25 +67,12 @@ class Document extends CI_Controller
 		redirect('document/sign');
 	}
 
-	function t($token=""){
-		if($token == ""){
-			redirect('Notfound');
-		} else {
-			$doc = $this->Document_model->get_by(['token' => $token])->row_array();
-			if(!empty($doc)){
-				echo "valid";
-			} else {
-				redirect('Notfound');
-			}
-		}
-	}
-
 	public function sign()
 	{
 		if ($this->session->userdata('doc_id') !== null) {
-			$doc = $this->Document_model->get_by(['id' => $this->session->userdata('doc_id')])->row_array();
+			$doc = $this->Document_model->get_qry($this->session->userdata('doc_id'))->row_array();
 			$data['doc'] = $doc;
-			$data['token'] = random_string('alnum', 8);
+			$data['token'] = uniqid();
 			$this->template->load('Template', 'draw', $data);
 		} else {
 			redirect('welcome');
@@ -144,5 +138,35 @@ class Document extends CI_Controller
 		} else {
 			// redirect(base_url());
 		}
+	}
+
+	public function delete($id)
+	{
+		$data = $this->Document_model->get_by(['id' => $id])->row_array();
+			// echo file_exists('assets/upload/' . $data['original_file_name']);
+			// die;
+		if (!empty($data)) {
+
+			if($data['original_file_name'] !== ""){
+				if(file_exists('assets/upload/' . $data['original_file_name']) == true){
+					unlink('assets/upload/' . $data['original_file_name']);
+				}
+			}
+
+			if( $data['signed_file_name'] !== null){
+				if(file_exists('assets/upload/' . $data['signed_file_name']) == true){
+					unlink('assets/upload/' . $data['signed_file_name']);
+				}
+			}
+
+			$affected_row = $this->Document_model->delete($id);
+			$result = array('status' => TRUE, "message" => "Hapus Data Berhasil", "detail_data" => null, "error" => "Delete");
+			echo json_encode($result);
+			
+		} else {
+			
+		}
+
+		
 	}
 }

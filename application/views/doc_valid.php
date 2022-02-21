@@ -20,7 +20,7 @@
       <div class="jumbotron mt-3 bg-success">
         <h1>Dokumen Valid</h1>
 
-        <p class="lead">Dokumen "<?= ucwords($doc['original_file_name']) ?>" telah ditandatangani secara digital pada <?= formatTglIndo_datetime($doc['signed_at']) ?></p>
+        <p class="lead">Dokumen "<?= ucwords($doc['original_file_name']) ?>" telah ditandatangani secara digital pada <?= formatTglIndo_datetime($doc['signed_at']) ?> oleh <?= $doc['name'] ?></p>
 
         <!-- <a class="btn btn-lg btn-primary" href="../../components/navbar/" role="button">View navbar docs &raquo;</a> -->
       </div>

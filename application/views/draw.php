@@ -596,7 +596,7 @@
         if (fabricObj) {
 
             var options = {
-                text: base_url + "document/t/v/" + "<?= $token ?>",
+                text: base_url + "t/v/" + "<?= $token ?>",
                 width: 75,
                 height: 75,
                 colorDark: "#000000",

@@ -38,6 +38,8 @@
                                                 <th>Uploaded At</th>
                                                 <th>Signed File</th>
                                                 <th>Signed At</th>
+                                                <th>Signed By</th>
+                                                <th>#</th>
                                             </tr>
                                         </thead>
                                         <tbody>
