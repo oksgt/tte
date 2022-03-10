@@ -64,7 +64,7 @@ class Document extends CI_Controller
 			} else {
 				$row[] = "
 				<div class='text-right'>
-				<a class='btn btn-lg btn-outline-primary border-0' title='Lihat Dokumen' href='".base_url('document/download/' . $r->id)."'><i class='fas fa-eye'></i></a>
+				<a class='btn btn-lg btn-outline-primary border-0' title='Lihat Dokumen' href='".base_url('t/v/' . $r->token)."'><i class='fas fa-eye'></i></a>
 					<a class='btn btn-lg btn-outline-success border-0' title='Sudah Ditandatangani' href='".base_url('document/download/' . $r->id)."'><i class='fas fa-cloud-download-alt'></i></a>
 					<button onclick='hapus_doc(' . $r->id . ')' class='btn btn-sm btn-outline-secondary border-0'><i class='fas fa-trash'></i></button>
 				</div>
