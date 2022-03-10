@@ -18,6 +18,7 @@ class Document extends CI_Controller
 
 	public function index()
 	{
+		$this->session->set_userdata(['active' => 'document']);
 		$this->template->load('Template', 'document');
 	}
 
@@ -43,12 +44,39 @@ class Document extends CI_Controller
 			$no++;
 			$row = array();
 			$row[] = $no;
-			$row[] = $r->original_file_name;
-			$row[] = formatTglIndo_datetime($r->upload_time);
-			$row[] = ($r->signed_file_name !== null) ? '<a role="button" class="btn btn-primary btn-xs" href="' . base_url('document/download/' . $r->id) . '">Download</a> ' . $r->signed_file_name : '<a type="button" class="btn btn-warning btn-xs" href="' . base_url('document/prepareSign/' . $r->id) . '">Sign Now</a> ';
-			$row[] = ($r->signed_file_name !== null) ? formatTglIndo_datetime($r->signed_at) : "";
-			$row[] = $r->name;
-			$row[] = '<button onclick="hapus_doc(' . $r->id . ')" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-alt" aria-hidden="true"></i></button>';
+			$icon = base_url('assets/pdf-icon.png');
+			// $row[] = '<img src="'.$icon.'" class="rounded float-left" alt="...">&nbsp;&nbsp;&nbsp;' . str_replace($r->original_file_ext, "", $r->original_file_name);
+			$row[] = '
+						<div class="user-block ">
+                            <img class="rounded" src="'.$icon.'" alt="..." style="width: 32px; height: 32px; margin-top: 3px">
+                            <span class="username">
+                            <a href="#">'.str_replace($r->original_file_ext, "", $r->original_file_name).'</a>
+                            </span>
+                            <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;'.$r->name.' | Uploaded at '.formatTglIndo_datetime($r->upload_time).'</span>
+                        </div>';
+			if($r->token == null){
+				$row[] = "
+				<div class='text-right'>
+					<a href='".base_url('document/prepareSign/' . $r->id)."' class='btn btn-lg btn-outline-warning border-0' title='Belum Ditandatangani'><i class='fas fa-file-signature'></i></a>
+					<button onclick='hapus_doc(' . $r->id . ')' class='btn btn-sm btn-outline-secondary border-0'><i class='fas fa-trash'></i></button>
+				</div>
+				";
+			} else {
+				$row[] = "
+				<div class='text-right'>
+				<a class='btn btn-lg btn-outline-primary border-0' title='Lihat Dokumen' href='".base_url('document/download/' . $r->id)."'><i class='fas fa-eye'></i></a>
+					<a class='btn btn-lg btn-outline-success border-0' title='Sudah Ditandatangani' href='".base_url('document/download/' . $r->id)."'><i class='fas fa-cloud-download-alt'></i></a>
+					<button onclick='hapus_doc(' . $r->id . ')' class='btn btn-sm btn-outline-secondary border-0'><i class='fas fa-trash'></i></button>
+				</div>
+			";
+			}
+
+			
+			// $row[] = formatTglIndo_datetime($r->upload_time);
+			// $row[] = ($r->signed_file_name !== null) ? '<a role="button" class="btn btn-primary btn-xs" href="' . base_url('document/download/' . $r->id) . '">Download</a> ' . $r->signed_file_name : '<a type="button" class="btn btn-warning btn-xs" href="' . base_url('document/prepareSign/' . $r->id) . '">Sign Now</a> ';
+			// $row[] = ($r->signed_file_name !== null) ? formatTglIndo_datetime($r->signed_at) : "";
+			// $row[] = $r->name;
+			// $row[] = '<button onclick="hapus_doc(' . $r->id . ')" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-alt" aria-hidden="true"></i></button>';
 			$data[] = $row;
 		}
 
@@ -77,16 +105,7 @@ class Document extends CI_Controller
 		} else {
 			redirect('welcome');
 		}
-
-
-		// $plain_text = base_url();
-		// $ciphertext = $this->encryption->encrypt($plain_text);
-
-		// // Outputs: This is a plain-text message!
-		// echo "chipertext " . $ciphertext . "<br>"; 
-		// echo $this->encryption->decrypt($ciphertext);
 	}
-
 
 	function upload()
 	{

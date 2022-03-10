@@ -24,10 +24,13 @@ class T extends CI_Controller
             
 			if(!empty($doc)){
 				$data['doc'] = $doc;
-				$this->load->view('doc_valid', $data);
+				$data['is_view'] = true;
+				$data['token'] = $token;
+				$this->template->load('Template', 'draw', $data);
 			} else {
 				redirect('Notfound');
 			}
+			
 		}
 	}
 

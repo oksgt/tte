@@ -7,11 +7,33 @@ $(document).ready(function () {
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
-        "order": [],
+        // "order": [],
         "ajax": {
             "url": base_url + "/document/ajax_list",
             "type": "POST"
         },
+        
+	    "dom":
+            "<'row'<'col-sm-12'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>", 
+        "buttons": [
+            {
+                "text": '<i class="fa fa-upload"></i> Upload', 
+                "className": "btn btn-primary",
+                // action: function ( e, dt, node, config ) {
+                //     alert( 'Button activated' );
+                // }
+            }
+        ],
+        // buttons: [
+        //     {
+        //         text: 'My button',
+        //         action: function ( e, dt, node, config ) {
+        //             alert( 'Button activated' );
+        //         }
+        //     }
+        // ],
         "columnDefs": [{
             "targets": [-1],
             "orderable": false,

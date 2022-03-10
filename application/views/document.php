@@ -21,7 +21,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h2 class="card-title">Document List</h2>
                     </div>
@@ -30,16 +30,16 @@
                         <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="table" class="table small table-sm table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                                    <table id="table" class="table table-striped table-hover dataTable" width="100%">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Original File</th>
-                                                <th>Uploaded At</th>
+                                                <th width="10%">No</th>
+                                                <th width="70%">Document</th>
+                                                <!-- <th>Uploaded At</th>
                                                 <th>Signed File</th>
                                                 <th>Signed At</th>
-                                                <th>Signed By</th>
-                                                <th>#</th>
+                                                <th>Signed By</th> -->
+                                                <th width="20%" class="text-right"></th>
                                             </tr>
                                         </thead>
                                         <tbody>

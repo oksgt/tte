@@ -207,19 +207,53 @@
 </div> -->
 <br>
 
-<div id="pdf-container" style="color: #fff"></div>
+<div class="container">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header row">
+                <div class="col-6">
+                    <div class="user-block ">
+                    <img class="img-circle" src="<?= base_url('assets/documents.png') ?>" alt="user image">
+                        <span class="username">
+                        <a href="#"><?= str_replace($doc['original_file_ext'], "", $doc['original_file_name']) ?></a>
+                        </span>
+                        <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Uploaded at - <?= formatTglIndo_datetime($doc['upload_time']) ?></span>
+                    </div>
+                </div>
+                <?php if($doc['token'] !== null) { ?>
+                    <div class="col-6">
+                        <div class="user-block ">
+                        <img class="img-circle" src="<?= base_url('assets/signature.png') ?>" alt="user image">
+                            <span class="username">
+                            <a href="#">Document is valid & already signed</a>
+                            </span>
+                            <span class="description"><i class="fa fa-signature"> </i>&nbsp;<?= $doc['name'] ?> | Signed at - <?= formatTglIndo_datetime($doc['signed_at']) ?></span>
+                        </div>
+                    </div>
+                <?php } ?>
+                
+        </div>
+        </div>
+    </div>
 
-<div class="zoom">
-    <a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
-    <ul class="zoom-menu">
-        <li><a class="zoom-fab zoom-btn-sm zoom-btn-tte scale-transition scale-out"><i class="fa fa-qrcode "></i></a></li>
-        <li><a class="zoom-fab zoom-btn-sm zoom-btn-doc scale-transition scale-out"><i class="fa fa-eraser "></i></a></li>
-        <li><a class="zoom-fab zoom-btn-sm zoom-btn-tangram scale-transition scale-out"><i class="fa fa-save "></i></a></li>
-        <!-- <li><a class="zoom-fab zoom-btn-sm zoom-btn-report scale-transition scale-out">Action 4</a></li>
-            <li><a class="zoom-fab zoom-btn-sm zoom-btn-feedback scale-transition scale-out">Action 5</a></li> -->
-    </ul>
-
+    <div class="col-md-12 p-0">
+        <div id="pdf-container" class="mt-0" style="color: #fff"></div>
+    </div>
 </div>
+
+<?php if(!isset($is_view)){ ?>
+    <div class="zoom">
+        <a class="zoom-fab zoom-btn-large" id="zoomBtn"><i class="fa fa-bars"></i></a>
+        <ul class="zoom-menu">
+            <li><a class="zoom-fab zoom-btn-sm zoom-btn-tte scale-transition scale-out"><i class="fa fa-qrcode "></i></a></li>
+            <li><a class="zoom-fab zoom-btn-sm zoom-btn-doc scale-transition scale-out"><i class="fa fa-eraser "></i></a></li>
+            <li><a class="zoom-fab zoom-btn-sm zoom-btn-tangram scale-transition scale-out"><i class="fa fa-save "></i></a></li>
+        </ul>
+    </div>
+<?php } ?>
+
+
+
 <script src="<?= base_url('assets/template/') ?>plugins/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/draw/') ?>pdf.min.js"></script>
 <script>
@@ -604,7 +638,7 @@
                 correctLevel: QRCode.CorrectLevel.H, // L, M, Q, H
 
                 title: 'Digitally Signed',
-                titleFont: "normal italic bold 10px Arial",
+                titleFont: "normal italic bold 9px Arial",
                 titleColor: "#004284",
                 titleBackgroundColor: "#fff",
                 titleHeight: 15,
@@ -747,7 +781,12 @@
         })
     }
 
-    var file_ = "<?= $doc['original_file_name'] ?>";
+    <?php if(isset($is_view)){ ?>
+        var file_ = "<?= $doc['signed_file_name'] ?>";
+    <?php } else { ?>
+        var file_ = "<?= $doc['original_file_name'] ?>";
+    <?php } ?>
+    
 
     var pdf = new PDFAnnotate("pdf-container", base_url + 'assets/upload/' + file_, {
         onPageUpdated(page, oldData, newData) {
