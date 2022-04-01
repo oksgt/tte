@@ -210,27 +210,33 @@
 <div class="container">
     <div class="col-md-12">
         <div class="card card-primary card-outline">
-            <div class="card-header row">
-                <div class="col-6">
-                    <div class="user-block ">
-                    <img class="img-circle" src="<?= base_url('assets/documents.png') ?>" alt="user image">
-                        <span class="username">
-                        <a href="#"><?= str_replace($doc['original_file_ext'], "", $doc['original_file_name']) ?></a>
-                        </span>
-                        <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Uploaded at - <?= formatTglIndo_datetime($doc['upload_time']) ?></span>
-                    </div>
-                </div>
-                <?php if($doc['token'] !== null) { ?>
-                    <div class="col-6">
-                        <div class="user-block ">
-                        <img class="img-circle" src="<?= base_url('assets/signature.png') ?>" alt="user image">
-                            <span class="username">
-                            <a href="#">Document is valid & already signed</a>
-                            </span>
-                            <span class="description"><i class="fa fa-signature"> </i>&nbsp;<?= $doc['name'] ?> | Signed at - <?= formatTglIndo_datetime($doc['signed_at']) ?></span>
+            <div class="card-body">
+                <div class="row">
+                    <!-- <div class=""> -->
+                        <div class="col-md-6 mb-1">
+                            <div class="user-block ">
+                            <img class="img-circle" src="<?= base_url('assets/documents.png') ?>" alt="user image">
+                                <span class="username">
+                                <a href="#"><?= str_replace($doc['original_file_ext'], "", $doc['original_file_name']) ?></a>
+                                </span>
+                                <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Uploaded at - <?= formatTglIndo_datetime($doc['upload_time']) ?></span>
+                            </div>
                         </div>
-                    </div>
-                <?php } ?>
+                        <?php 
+                        if($doc['signed_at'] !== null){ ?>
+                            <div class="col-md-6 mb-1">
+                                <div class="user-block ">
+                                <img class="img-circle" src="<?= base_url('assets/signature.png') ?>" alt="user image">
+                                    <span class="username">
+                                    <a href="#"><?= str_replace($doc['signed_file_ext'], "", $doc['signed_file_name']) ?></a>
+                                    </span>
+                                    <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Signed at at - <?= formatTglIndo_datetime($doc['signed_at']) ?></span>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        
+                    <!-- </div> -->
+                </div>
                 
         </div>
         </div>
