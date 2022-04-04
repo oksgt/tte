@@ -216,8 +216,18 @@
                         <div class="col-md-6 mb-1">
                             <div class="user-block ">
                             <img class="img-circle" src="<?= base_url('assets/documents.png') ?>" alt="user image">
+                                <?php 
+                                    $string = str_replace($doc['original_file_ext'], "", $doc['original_file_name']);
+                                    // truncate string
+                                    $stringCut = substr($string, 0, 40);
+                                    $endPoint = strrpos($stringCut, ' ');
+
+                                    //if the string doesn't contain any space then it will cut without word basis.
+                                    $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                                    $string .= '...';
+                                ?>
                                 <span class="username">
-                                <a href="#"><?= str_replace($doc['original_file_ext'], "", $doc['original_file_name']) ?></a>
+                                    <a href="#" title="<?= str_replace($doc['original_file_ext'], "", $doc['original_file_name']) ?>"><?= $string ?></a>
                                 </span>
                                 <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Uploaded at - <?= formatTglIndo_datetime($doc['upload_time']) ?></span>
                             </div>
@@ -227,8 +237,18 @@
                             <div class="col-md-6 mb-1">
                                 <div class="user-block ">
                                 <img class="img-circle" src="<?= base_url('assets/signature.png') ?>" alt="user image">
+                                    <?php 
+                                        $string = str_replace($doc['signed_file_ext'], "", $doc['signed_file_name']);
+                                        // truncate string
+                                        $stringCut = substr($string, 0, 40);
+                                        $endPoint = strrpos($stringCut, ' ');
+
+                                        //if the string doesn't contain any space then it will cut without word basis.
+                                        $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                                        $string .= '...';
+                                    ?>
                                     <span class="username">
-                                    <a href="#"><?= str_replace($doc['signed_file_ext'], "", $doc['signed_file_name']) ?></a>
+                                        <a href="#" title="<?= str_replace($doc['signed_file_ext'], "", $doc['signed_file_name']); ?>"><?= $string ?></a>
                                     </span>
                                     <span class="description"><i class="fa fa-user-alt"> </i>&nbsp;<?= $doc['name'] ?> | Signed at at - <?= formatTglIndo_datetime($doc['signed_at']) ?></span>
                                 </div>
@@ -629,20 +649,65 @@
         }
     }
 
+    // PDFAnnotate.prototype.addImageToCanvas = function() {
+    //     var inst = this;
+    //     var fabricObj = inst.fabricObjects[inst.active_canvas];
+
+    //     if (fabricObj) {
+
+    //         var options = {
+    //             text: base_url + "t/v/" + "<?= $token ?>",
+    //             width: 75,
+    //             height: 75,
+    //             colorDark: "#000000",
+    //             colorLight: "#ffffff",
+    //             correctLevel: QRCode.CorrectLevel.L, // L, M, Q, H
+    //             logo: "<?php echo base_url("assets/logopdam_bg.png")?>",
+    //             title: 'Digitally Signed',
+    //             titleFont: "normal italic bold 9px Arial",
+    //             titleColor: "#004284",
+    //             titleBackgroundColor: "#fff",
+    //             titleHeight: 15,
+    //             titleTop: 10,
+    //         };
+
+    //         // Create QRCode Object
+    //         console.log(options);
+    //         var qrcode = new QRCode(document.getElementById("qrcode"), options);
+
+    //         var base_64_file = document.getElementById('qrcode').querySelector('canvas').toDataURL('image/png');
+    //         const filenya = dataURLtoFile(base_64_file, "this.png");
+
+    //         var url = URL.createObjectURL(filenya);
+    //         console.log("fabricObj.width " + fabricObj.width);
+
+    //         var gambar = new fabric.Image.fromURL(url, function(img) {
+    //             console.log(img);
+    //             signed = 1;
+    //             fabricObj.add(img.set({
+    //                 left: fabricObj.width - 500,
+    //                 top: fabricObj.height - 400
+    //             }));
+    //         });
+
+    //     }
+    // }
+
     PDFAnnotate.prototype.addImageToCanvas = function() {
         var inst = this;
-        var fabricObj = inst.fabricObjects[inst.active_canvas];
-
+        var fabricObj = inst.fabricObjects[0];
+        var options = null;
+        var gambar = null;
         if (fabricObj) {
 
-            var options = {
+            options = {
                 text: base_url + "t/v/" + "<?= $token ?>",
                 width: 75,
                 height: 75,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H, // L, M, Q, H
-
+                correctLevel: QRCode.CorrectLevel.L, // L, M, Q, H
+                // logo: "<?php echo base_url("assets/logopdam_bg.png")?>",
                 title: 'Digitally Signed',
                 titleFont: "normal italic bold 9px Arial",
                 titleColor: "#004284",
@@ -652,6 +717,7 @@
             };
 
             // Create QRCode Object
+            console.log(options);
             var qrcode = new QRCode(document.getElementById("qrcode"), options);
 
             var base_64_file = document.getElementById('qrcode').querySelector('canvas').toDataURL('image/png');
@@ -660,13 +726,32 @@
             var url = URL.createObjectURL(filenya);
             console.log("fabricObj.width " + fabricObj.width);
 
-            var gambar = new fabric.Image.fromURL(url, function(img) {
+            gambar = new fabric.Image.fromURL(url, function(img) {
                 console.log(img);
                 signed = 1;
-                fabricObj.add(img.set({
-                    left: fabricObj.width - 500,
-                    top: fabricObj.height - 400
-                }));
+
+                const windowPrompt = window.prompt;
+
+					window.prompt = function(message) {
+						console.log(`window.prompt called with message: ${message}`);
+
+						const input = windowPrompt(message);
+						console.log(`page entered: ${input}`);
+						fabricObj = inst.fabricObjects[input- 1];
+						// fabricObj.add(new fabric.Image(image))
+                        fabricObj.add(img.set({
+                            left: fabricObj.width - 500,
+                            top: fabricObj.height - 400
+                        }));
+                        img.remove();
+						return input;
+					};
+					prompt('Masukan halaman penempatan barcode');
+
+                // fabricObj.add(img.set({
+                //     left: fabricObj.width - 500,
+                //     top: fabricObj.height - 400
+                // }));
             });
 
         }
@@ -765,6 +850,7 @@
         var bg = fabricObj.backgroundImage;
         if (confirm('Hapus tanda tangan digital ?')) {
             fabricObj.clear();
+            signed = 0;
             fabricObj.setBackgroundImage(bg, fabricObj.renderAll.bind(fabricObj));
         }
     }
